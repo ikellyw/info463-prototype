@@ -28,14 +28,13 @@
     video.play();
 
     if (currTrial <= numTrials) {
+      // hm what if we used timeout to call makeObstacle function instead of using it to make obstacles inside the function??
       let obstaclePosition = await makeObstacle();
 
-      // document.addEventListener("keydown", keyIsPressed);
+      // we want to wait till user presses the "correct key"
       document.addEventListener("keydown", function(event) {
         keyIsPressed(event, obstaclePosition);
       });
-
-      // console.log(obstaclePosition);
 
     } else {
       let avgReactionTime = total / numTrials;
@@ -57,28 +56,41 @@
   }
 
 
-  // should also accept obstacle's position as a param?
   function keyIsPressed(event, obstaclePosition) {
-    let keyCode = event.keyCode; // 37 - left, 32 - space, 39 - right
-
+    console.log(currTrial);
     if (currTrial > numTrials) {
       obstacleDisplayed = false;
     }
 
-    // then check if the keyCode matches obstacle's position
-    // reaction time shouldn't be calculated till they match
-    if (event.key === 'Enter' && (obstacleDisplayed)) {
-      clickedTime = Date.now();
-      reactionTime = (clickedTime - createdTime) / 1000;
-      total += reactionTime;
-      id("box").innerHTML = "";
+    if (obstacleDisplayed) {
+      console.log("hi" + currTrial);
+      console.log(obstaclePosition);
+      if ((event.keyCode === 37) && (obstaclePosition === "left")) { // 37 = left arrow
+        calcReactionTime();
+      } else if ((event.keyCode === 32) && (obstaclePosition === "center")) { // 32 = space
+        calcReactionTime();
+      } else if ((event.keyCode === 39) && (obstaclePosition === "right")) { // 39 = right arrow
+        calcReactionTime();
+      }
     }
+  }
+
+
+  function calcReactionTime() {
+    currTrial += 1;
+    clickedTime = Date.now();
+    reactionTime = (clickedTime - createdTime) / 1000;
+    total += reactionTime;
+    id("box").innerHTML = "";
   }
 
 
   async function makeObstacle() {
     id("curr-trial").innerHTML = "Trial " + (currTrial);
-    currTrial += 1;
+
+    // right now we stop 1 early and create 1 extra obstacle
+    // currTrial should only update if correct key is pressed! should we move this somethwhere else???
+    // currTrial += 1;
 
     let time = Math.random() * 5000;
     let obstaclePosition = await new Promise((resolve, reject) => {
@@ -99,6 +111,7 @@
         resolve(position);
       }, time);
     });
+    console.log(obstaclePosition);
     return obstaclePosition;
   }
 
@@ -111,18 +124,16 @@
 
     if (randomPosition === 0) {
       left = 0;
-      top = maxTop / 2;
       positionIndicator = "left";
     } else if (randomPosition === 1) {
       left = (maxLeft - 0) / 2;
-      top = maxTop / 2;
       positionIndicator = "center";
     } else {
       left = maxLeft;
-      top = maxTop / 2;
       positionIndicator = "right";
     }
 
+    top = maxTop / 2;
     id("box").style.left = left + "px";
     id("box").style.top = top + "px";
     id("box").style.display = "block";

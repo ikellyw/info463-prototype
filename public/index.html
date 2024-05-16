@@ -1,15 +1,24 @@
+<!DOCTYPE html>
+
 <html>
-  <head>
-    <script src="app.js"></script>
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
-    <h1>Test your reaction time!</h1>
-		<p>Click on the boxes and circles as quickly as you can. Your reaction time will be posted below: </p>
-	
-		<p id="printReactionTime"></p<>
-	
-		<div id="box"></div>
-		
-  </body>
+ <head>
+   <script src="app.js"></script>
+   <link rel="stylesheet" href="styles.css">
+ </head>
+ <body>
+   <div class="video">
+     <video id="video">
+       <source src="" type="video/mp4">
+     </video>
+   </div>
+   <div class="content">
+     <h1>Test your reaction time!</h1>
+     <button id="start">Start</button>
+     <p>Press the enter key when you see an upcoming obstacle.</p>
+     <p>Your average reaction time will be posted below at the end of the simulation.</p>
+     <p id="curr-trial">Trial 1</p<>
+     <p id="print-avg"></p>
+   </div>
+   <div id="box"></div>
+ </body>
 </html>

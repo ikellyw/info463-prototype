@@ -1,11 +1,25 @@
 body {
   font-family: Verdana, Geneva, sans-serif;
-}
+ }
 
-#box {
+ #box {
   width: 200px;
   height: 200px;
-  background-color: blue;
   display: none;
-  position: relative; 
-}
+  position: relative;
+ }
+
+
+ #video {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: 1500px;
+ }
+
+ 
+ .content {
+  position: fixed;
+  background-color: white;
+  padding: 15px;
+ }

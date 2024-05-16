@@ -3,7 +3,7 @@
 (function() {
   window.addEventListener("load", init);
 
-  const FILE_NAMES = ["person1.png", "person3.png", "person5.png", "person6.png",
+  const FILE_NAMES = ["person1.png", "person2.png", "person3.png", "person4.png", "person5.png", "person6.png",
                       "pet1.png", "pet2.png", "pet3.png"]
 
   let clickedTime;

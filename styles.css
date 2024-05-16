@@ -9,7 +9,7 @@ body {
   position: relative;
  }
 
- #video {
+ #video, .video img {
   position: fixed;
   right: 0;
   bottom: 0;
@@ -21,3 +21,8 @@ body {
   background-color: white;
   padding: 15px;
  }
+
+ h1, p {
+  font-size: 12px;
+ }
+ 

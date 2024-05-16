@@ -2,12 +2,6 @@ body {
   font-family: Verdana, Geneva, sans-serif;
  }
 
- html, body {
-  max-width: 1000px;
-  max-height: 800px;
- }
-
-
  #box {
   width: 200px;
   height: 200px;
@@ -21,7 +15,7 @@ body {
   bottom: 0;
   width: 1500px;
  }
- 
+
  .content {
   position: fixed;
   background-color: white;

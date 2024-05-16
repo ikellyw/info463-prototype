@@ -23,14 +23,20 @@
   }
 
 
-  function start() {
+  async function start() {
     var video = document.getElementById("video");
     video.play();
 
-    console.log(currTrial)
     if (currTrial <= numTrials) {
-      document.addEventListener("keydown", keyIsPressed);
-      makeObstacle();
+      let obstaclePosition = await makeObstacle();
+
+      // document.addEventListener("keydown", keyIsPressed);
+      document.addEventListener("keydown", function(event) {
+        keyIsPressed(event, obstaclePosition);
+      });
+
+      // console.log(obstaclePosition);
+
     } else {
       let avgReactionTime = total / numTrials;
       id("print-avg").innerHTML = "Your Average Reaction Time: " +
@@ -45,11 +51,22 @@
   }
 
 
-  function keyIsPressed(event) {
+  function stop() {
+    var video = document.getElementById("video");
+    // video.stop();
+  }
+
+
+  // should also accept obstacle's position as a param?
+  function keyIsPressed(event, obstaclePosition) {
+    let keyCode = event.keyCode; // 37 - left, 32 - space, 39 - right
+
     if (currTrial > numTrials) {
       obstacleDisplayed = false;
     }
 
+    // then check if the keyCode matches obstacle's position
+    // reaction time shouldn't be calculated till they match
     if (event.key === 'Enter' && (obstacleDisplayed)) {
       clickedTime = Date.now();
       reactionTime = (clickedTime - createdTime) / 1000;
@@ -58,33 +75,31 @@
     }
   }
 
-  function stop() {
-    var video = document.getElementById("video");
-    // video.stop();
-  }
 
-
-  function makeObstacle() {
+  async function makeObstacle() {
     id("curr-trial").innerHTML = "Trial " + (currTrial);
     currTrial += 1;
 
-    var time = Math.random() * 5000;
+    let time = Math.random() * 5000;
+    let obstaclePosition = await new Promise((resolve, reject) => {
+      setTimeout(function() {
+        id("box").innerHTML = "";
 
-    setTimeout(function() {
-      id("box").innerHTML = "";
+        let obstacle = document.createElement("img");
+        let index = Math.floor(Math.random() * FILE_NAMES.length);
+        obstacle.src = "img/" + FILE_NAMES[index];
+        obstacle.alt = "obstacle";
+        obstacle.style.width = "80%";
 
-      let obstacle = document.createElement("img");
-      let index = Math.floor(Math.random() * FILE_NAMES.length);
-      obstacle.src = "img/" + FILE_NAMES[index];
-      obstacle.alt = "obstacle";
-      obstacle.style.width = "80%";
+        let box = id("box");
+        box.appendChild(obstacle);
+        let position = positionObstacle();
+        createdTime = Date.now();
 
-      let box = id("box");
-      box.appendChild(obstacle);
-      positionObstacle()
-      createdTime = Date.now();
-
-    }, time);
+        resolve(position);
+      }, time);
+    });
+    return obstaclePosition;
   }
 
 
@@ -92,23 +107,29 @@
     let maxLeft = 800;
     let maxTop = 600;
     let randomPosition = Math.floor(Math.random() * 3);
-    let left, top;
+    let left, top, positionIndicator;
 
     if (randomPosition === 0) {
       left = 0;
       top = maxTop / 2;
+      positionIndicator = "left";
     } else if (randomPosition === 1) {
       left = (maxLeft - 0) / 2;
       top = maxTop / 2;
+      positionIndicator = "center";
     } else {
       left = maxLeft;
       top = maxTop / 2;
+      positionIndicator = "right";
     }
 
     id("box").style.left = left + "px";
     id("box").style.top = top + "px";
     id("box").style.display = "block";
+
+    return positionIndicator;
   }
+
 
   function id(name) {
     return document.getElementById(name);

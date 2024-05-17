@@ -1,5 +1,5 @@
 body {
-  font-family: Verdana, Geneva, sans-serif;/
+  font-family: Verdana, Geneva, sans-serif;
  }
 
  #box {
@@ -38,7 +38,7 @@ body {
 
  #start:disabled {
   background-color: rgba(177, 177, 177, 0.696);
-  border-color: rgba(0, 0, 0, 0.475);
+  border-color: rgba(92, 92, 92, 0.715);
  }
 
  h1, p, ul {
@@ -51,7 +51,7 @@ body {
   top: 550px;
   left: 690px;
  }
- 
+
  #left-warning {
   position: fixed;
   width: 100px;

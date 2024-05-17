@@ -3,17 +3,11 @@
 (function() {
   window.addEventListener("load", init);
 
-  // document.addEventListener("keydown", function(event) {
-  //   if (event.key === " ") {
-  //     event.preventDefault(); // to prevent browser from interpreting space bar as click button
-  //   }
-  // });
-
   const FILE_NAMES = ["person1.png", "person2.png", "person3.png", "person4.png", "person5.png", "person6.png",
                       "pet1.png", "pet2.png", "pet3.png"]
 
   const OBSTACLE_TIME = 5000; // adjust this value to change how long it takes for an obstacle to appear
-  const NUM_TRIALS = 3; // adjust this value to change number of trials
+  const NUM_TRIALS = 5; // adjust this value to change number of trials
 
   let clickedTime;
   let createdTime;
@@ -31,10 +25,13 @@
     button.addEventListener('click', start);
   }
 
-
   async function start() {
     // var video = document.getElementById("video");
     // video.play();
+
+    // disable the start button once simulation starts
+    // otherwise browser will interpret spacebar input as clicking the button
+    id("start").disabled = true;
 
     if (currTrial <= NUM_TRIALS) {
       await makeObstacle();
@@ -42,12 +39,10 @@
     }
   }
 
-
   function stop() {
-    var video = document.getElementById("video");
+    // var video = document.getElementById("video");
     // video.stop();
   }
-
 
   async function keyIsPressed(e) {
     if (currTrial > NUM_TRIALS) {
@@ -55,15 +50,14 @@
     }
 
     if (obstacleDisplayed) {
-      if ((e.key === "ArrowLeft" && obstaclePosition === "left") ||
+      if ((e.key === "ArrowLeft" && obstaclePosition === "right") ||
           (e.key === " " && obstaclePosition === "center") ||
-          (e.key === "ArrowRight" && obstaclePosition === "right")) {
+          (e.key === "ArrowRight" && obstaclePosition === "left")) {
 
         id("box").innerHTML = "";
-
         calcReactionTime();
         currTrial += 1;
-        console.log("start:" + currTrial)
+        console.log("start:" + currTrial); // debugging purposes
 
         if (currTrial <= NUM_TRIALS) {
           id("curr-trial").innerHTML = "Trial " + (currTrial);
@@ -75,7 +69,7 @@
           id("curr-trial").innerHTML = "All trials complete";
           let avgReactionTime = total / NUM_TRIALS;
           id("print-avg").innerHTML = "Your Average Reaction Time: " +
-                                        avgReactionTime.toFixed(4) + " seconds";
+                                       avgReactionTime.toFixed(4) + " seconds";
           obstacleDisplayed = false;
           document.removeEventListener("keydown", keyIsPressed);
         }
@@ -83,17 +77,15 @@
     }
   }
 
-
   function calcReactionTime() {
     clickedTime = Date.now();
     reactionTime = (clickedTime - createdTime) / 1000;
     total += reactionTime;
   }
 
-
   async function makeObstacle() {
     await new Promise((resolve, reject) => {
-      console.log("obstacle created")
+      console.log("obstacle created"); // debugging purposes
 
       let time = Math.random() * OBSTACLE_TIME;
 
@@ -114,10 +106,12 @@
     })
   }
 
-
   function getObstaclePosition() {
-    let maxLeft = 800;
-    let maxTop = 600;
+    let viewportWidth = document.documentElement.clientWidth;
+    let viewportHeight = document.documentElement.clientHeight;
+    let maxLeft = viewportWidth - 200;
+    let maxTop = viewportHeight / 2;
+
     let randomPosition = Math.floor(Math.random() * 3);
     let left, top, positionIndicator;
 
@@ -125,21 +119,21 @@
       left = 0;
       positionIndicator = "left";
     } else if (randomPosition === 1) {
-      left = (maxLeft - 0) / 2;
+      left = Math.max(0, maxLeft / 2);
+      top = Math.max(maxTop, (viewportHeight - 200) / 2);
       positionIndicator = "center";
     } else {
       left = maxLeft;
+      top = Math.max(maxTop, (viewportHeight - 200) / 2);
       positionIndicator = "right";
     }
 
-    top = maxTop / 2;
     id("box").style.left = left + "px";
     id("box").style.top = top + "px";
     id("box").style.display = "block";
 
     return positionIndicator;
   }
-
 
   function id(name) {
     return document.getElementById(name);

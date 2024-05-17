@@ -47,7 +47,7 @@
   }
 
   async function start() {
-    var video = document.getElementById("video");
+    //var video = document.getElementById("video");
     //video.play();
     playWarning();
 
@@ -62,7 +62,7 @@
   }
 
   function stop() {
-    var video = document.getElementById("video");
+    // var video = document.getElementById("video");
     // video.stop();
   }
 
@@ -91,7 +91,7 @@
           id("curr-trial").innerHTML = "All " + NUM_TRIALS + " trials have been completed!";
           let avgReactionTime = total / NUM_TRIALS;
           id("print-avg").innerHTML = "Average Reaction Time: " +
-                                        avgReactionTime.toFixed(4) + " seconds";
+                                       avgReactionTime.toFixed(4) + " seconds";
           obstacleDisplayed = false;
           document.removeEventListener("keydown", keyIsPressed);
         }
@@ -122,6 +122,8 @@
         id("box").appendChild(obstacle);
         createdTime = Date.now();
         obstaclePosition = getObstaclePosition();
+
+        // NOTE: add diff warning signals here based on the obstaclePosition?
 
         resolve();
       }, time);

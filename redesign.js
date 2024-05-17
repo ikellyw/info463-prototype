@@ -77,7 +77,6 @@
           (e.key === "ArrowRight" && obstaclePosition === "right")) {
 
         id("box").innerHTML = "";
-
         calcReactionTime();
         currTrial += 1;
         console.log("start:" + currTrial); // debugging purposes

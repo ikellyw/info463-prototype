@@ -13,7 +13,7 @@ body {
   position: fixed;
   right: 0;
   bottom: 0;
-  width: 1500px;
+  width: 1550px;
  }
 
  .content {
@@ -22,7 +22,31 @@ body {
   padding: 15px;
  }
 
- h1, p {
+ h1, p, ul {
   font-size: 12px;
  }
+
+ #brake {
+  position: fixed;
+  width: 150px;
+  top: 550px;
+  left: 690px;
+ }
  
+ #left-warning {
+  position: fixed;
+  width: 100px;
+  top: 560px;
+  left: 30px;
+ }
+
+ #right-warning {
+  position: fixed;
+  width: 100px;
+  top: 560px;
+  right: 30px;
+ }
+
+ audio {
+  display: none;
+}

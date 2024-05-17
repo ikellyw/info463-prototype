@@ -8,18 +8,29 @@
  </head>
  <body>
    <div class="video">
-     <video id="video">
+     <!-- <video id="video">
        <source src="" type="video/mp4">
-     </video>
+     </video> -->
+     <img src="img/background.png">
    </div>
    <div class="content">
-     <h1>Test your reaction time!</h1>
+     <h1>Imagine you're driving...</h1>
      <button id="start">Start</button>
-     <p>Press the enter key when you see an upcoming obstacle.</p>
+     <!-- <button id="restart">Re-start</button> -->
+     <p>Instructions:</p>
+     <ul>
+      <li>Left Arrow Key: obstacle appears on the left side of the screen.</li>
+      <li>Space Bar: obstacle appears in the center of the screen.</li>
+      <li>Right Arrow Key: obstacle appears on the right side of the screen.</li>
+     </ul>
      <p>Your average reaction time will be posted below at the end of the simulation.</p>
      <p id="curr-trial">Trial 1</p<>
      <p id="print-avg"></p>
    </div>
    <div id="box"></div>
+   <img id="brake" src="img/brake-warning.png">
+   <img id="left-warning" src="img/left-warning.png">
+   <img id="right-warning" src="img/right-warning.png">
+   <audio controls><source src="img/beep.mp3" type="audio/mp3">
  </body>
 </html>

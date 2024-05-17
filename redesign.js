@@ -23,33 +23,39 @@
   function init() {
     let button = document.getElementById('start');
     button.addEventListener('click', start);
-    flash(document.getElementById('brake'));
-    flash(document.getElementById('left-warning'));
-    flash(document.getElementById('right-warning'));
   }
 
-  function flash(img) {
+  function flash(element) { // makes images flash
     window.setInterval(function() {
-      if (img.style.visibility == 'hidden'){
-        img.style.visibility = 'visible';
+      if (element.style.visibility == 'hidden'){
+        element.style.visibility = 'visible';
       } else {
-        img.style.visibility = 'hidden';
+        element.style.visibility = 'hidden';
       }
     }, 200);
   }
 
-  function stopFlash(img) {
-    document.getElementById('brake').style.visibility = 'hidden';
+  function startFlash(element) { // enables given flashing element
+    element.style.display = "block";
   }
 
-  function playWarning() {
+  function stopFlash() { // disables all flashing elements
+    id('left-warning').style.display = "none";
+    id('brake').style.display = "none";
+    id('right-warning').style.display = "none";
+  }
+
+  function playWarning() { // plays warning sound
     document.querySelector('audio').play();
   }
 
   async function start() {
     //var video = document.getElementById("video");
     //video.play();
-    playWarning();
+
+    flash(id('left-warning'));
+    flash(id('brake'));
+    flash(id('right-warning'));
 
     // disable the start button once simulation starts
     // otherwise browser will interpret spacebar input as clicking the button
@@ -76,6 +82,7 @@
           (e.key === " " && obstaclePosition === "center") ||
           (e.key === "ArrowRight" && obstaclePosition === "left")) {
 
+        stopFlash();
         id("box").innerHTML = "";
         calcReactionTime();
         currTrial += 1;
@@ -117,13 +124,21 @@
 
         obstacle.src = "img/" + FILE_NAMES[index];
         obstacle.alt = "obstacle";
-        obstacle.style.width = "80%";
+        obstacle.style.width = "130%";
 
         id("box").appendChild(obstacle);
+        playWarning();
         createdTime = Date.now();
         obstaclePosition = getObstaclePosition();
 
         // NOTE: add diff warning signals here based on the obstaclePosition?
+        if (obstaclePosition === "left") {
+          startFlash(id('left-warning'));
+        } else if (obstaclePosition === "center") {
+          startFlash(id('brake'));
+        } else if (obstaclePosition === "right") {
+          startFlash(id('right-warning'));
+        }
 
         resolve();
       }, time);

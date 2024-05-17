@@ -95,7 +95,7 @@
 
         obstacle.src = "img/" + FILE_NAMES[index];
         obstacle.alt = "obstacle";
-        obstacle.style.width = "80%";
+        obstacle.style.width = "130%";
 
         id("box").appendChild(obstacle);
         createdTime = Date.now();

@@ -18,8 +18,9 @@ body {
 
  .content {
   position: fixed;
-  background-color: white;
-  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.75);
+  padding: 15px 25px;
+  width: 400px;
  }
 
  #start, .content {
@@ -30,10 +31,12 @@ body {
   width: 250px;
   height: 45px;
   background-color: red;
-  border-color: rgb(183, 40, 40);
+  border: none;
   display: block;
   margin: auto;
   margin-top: 20px;
+  font-family: Verdana, Geneva, sans-serif;
+  color: white;
  }
 
  #start:disabled {
@@ -43,6 +46,7 @@ body {
 
  h1, p, ul {
   font-size: 12px;
+  line-height: 1.1rem;
  }
 
  #brake {
@@ -50,20 +54,23 @@ body {
   width: 150px;
   top: 550px;
   left: 690px;
+  display: none;
  }
 
  #left-warning {
   position: fixed;
   width: 100px;
   top: 560px;
-  left: 30px;
+  left: 200px;
+  display: none;
  }
 
  #right-warning {
   position: fixed;
   width: 100px;
   top: 560px;
-  right: 30px;
+  right: 200px;
+  display: none;
  }
 
  audio {

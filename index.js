@@ -3,18 +3,27 @@
 (function() {
   window.addEventListener("load", init);
 
+  window.addEventListener("keydown", function(event) {
+    if (event.key === " ") {
+      event.preventDefault(); // to prevent browser from interpreting space bar as click button
+    }
+  });
+
   const FILE_NAMES = ["person1.png", "person2.png", "person3.png", "person4.png", "person5.png", "person6.png",
                       "pet1.png", "pet2.png", "pet3.png"]
+
+  const OBSTACLE_TIME = 5000; // adjust this value to change how long it takes for an obstacle to appear
+  const NUM_TRIALS = 3; // adjust this value to change number of trials
 
   let clickedTime;
   let createdTime;
   let reactionTime;
+  let obstaclePosition;
 
   let currTrial = 1;
-  let numTrials = 3;
   let total = 0.0;
 
-  let obstacleDisplayed = true;
+  let obstacleDisplayed = true; // whether there is an object displayed on the screen
 
 
   function init() {
@@ -24,28 +33,12 @@
 
 
   async function start() {
-    var video = document.getElementById("video");
-    video.play();
+    // var video = document.getElementById("video");
+    // video.play();
 
-    if (currTrial <= numTrials) {
-      // hm what if we used timeout to call makeObstacle function instead of using it to make obstacles inside the function??
-      let obstaclePosition = await makeObstacle();
-
-      // we want to wait till user presses the "correct key"
-      document.addEventListener("keydown", function(event) {
-        keyIsPressed(event, obstaclePosition);
-      });
-
-    } else {
-      let avgReactionTime = total / numTrials;
-      id("print-avg").innerHTML = "Your Average Reaction Time: " +
-                                   avgReactionTime.toFixed(2) + " seconds";
-      id("box").innerHTML = "";
-
-      obstacleDisplayed = false;
-      document.removeEventListener("keydown", keyIsPressed);
-
-      stop();
+    if (currTrial <= NUM_TRIALS) {
+      await makeObstacle();
+      document.addEventListener("keydown", keyIsPressed);
     }
   }
 
@@ -56,67 +49,74 @@
   }
 
 
-  function keyIsPressed(event, obstaclePosition) {
-    console.log(currTrial);
-    if (currTrial > numTrials) {
+  async function keyIsPressed(e) {
+    if (currTrial > NUM_TRIALS) {
       obstacleDisplayed = false;
     }
+    document.removeEventListener("keydown", keyIsPressed);
 
     if (obstacleDisplayed) {
-      console.log("hi" + currTrial);
-      console.log(obstaclePosition);
-      if ((event.keyCode === 37) && (obstaclePosition === "left")) { // 37 = left arrow
+      if ((e.key === "ArrowLeft" && obstaclePosition === "left") ||
+          (e.key === " " && obstaclePosition === "center") ||
+          (e.key === "ArrowRight" && obstaclePosition === "right")) {
+
+        id("box").innerHTML = "";
+
         calcReactionTime();
-      } else if ((event.keyCode === 32) && (obstaclePosition === "center")) { // 32 = space
-        calcReactionTime();
-      } else if ((event.keyCode === 39) && (obstaclePosition === "right")) { // 39 = right arrow
-        calcReactionTime();
+        currTrial += 1;
+        console.log("start:" + currTrial)
+
+        if (currTrial <= NUM_TRIALS) {
+          id("curr-trial").innerHTML = "Trial " + (currTrial);
+          document.removeEventListener("keydown", keyIsPressed);
+          await makeObstacle();
+          document.addEventListener("keydown", keyIsPressed);
+
+        } else {
+          id("curr-trial").innerHTML = "All trials complete";
+          let avgReactionTime = total / NUM_TRIALS;
+          id("print-avg").innerHTML = "Your Average Reaction Time: " +
+                                        avgReactionTime.toFixed(4) + " seconds";
+          obstacleDisplayed = false;
+          document.removeEventListener("keydown", keyIsPressed);
+        }
       }
     }
   }
 
 
   function calcReactionTime() {
-    currTrial += 1;
     clickedTime = Date.now();
     reactionTime = (clickedTime - createdTime) / 1000;
     total += reactionTime;
-    id("box").innerHTML = "";
   }
 
 
   async function makeObstacle() {
-    id("curr-trial").innerHTML = "Trial " + (currTrial);
+    await new Promise((resolve, reject) => {
+      console.log("obstacle created")
 
-    // right now we stop 1 early and create 1 extra obstacle
-    // currTrial should only update if correct key is pressed! should we move this somethwhere else???
-    // currTrial += 1;
+      let time = Math.random() * OBSTACLE_TIME;
 
-    let time = Math.random() * 5000;
-    let obstaclePosition = await new Promise((resolve, reject) => {
       setTimeout(function() {
-        id("box").innerHTML = "";
-
         let obstacle = document.createElement("img");
         let index = Math.floor(Math.random() * FILE_NAMES.length);
+
         obstacle.src = "img/" + FILE_NAMES[index];
         obstacle.alt = "obstacle";
         obstacle.style.width = "80%";
 
-        let box = id("box");
-        box.appendChild(obstacle);
-        let position = positionObstacle();
+        id("box").appendChild(obstacle);
         createdTime = Date.now();
+        obstaclePosition = getObstaclePosition();
 
-        resolve(position);
+        resolve();
       }, time);
-    });
-    console.log(obstaclePosition);
-    return obstaclePosition;
+    })
   }
 
 
-  function positionObstacle() {
+  function getObstaclePosition() {
     let maxLeft = 800;
     let maxTop = 600;
     let randomPosition = Math.floor(Math.random() * 3);

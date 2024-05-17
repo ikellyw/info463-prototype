@@ -1,5 +1,5 @@
 body {
-  font-family: Verdana, Geneva, sans-serif;
+  font-family: Verdana, Geneva, sans-serif;/
  }
 
  #box {
@@ -20,6 +20,25 @@ body {
   position: fixed;
   background-color: white;
   padding: 15px;
+ }
+
+ #start, .content {
+  border-radius: 1em;
+ }
+
+ #start {
+  width: 250px;
+  height: 45px;
+  background-color: red;
+  border-color: rgb(183, 40, 40);
+  display: block;
+  margin: auto;
+  margin-top: 20px;
+ }
+
+ #start:disabled {
+  background-color: rgba(177, 177, 177, 0.696);
+  border-color: rgba(0, 0, 0, 0.475);
  }
 
  h1, p, ul {

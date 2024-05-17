@@ -7,7 +7,7 @@
                       "pet1.png", "pet2.png", "pet3.png"]
 
   const OBSTACLE_TIME = 5000; // adjust this value to change how long it takes for an obstacle to appear
-  const NUM_TRIALS = 3; // adjust this value to change number of trials
+  const NUM_TRIALS = 5; // adjust this value to change number of trials
 
   let clickedTime;
   let createdTime;
@@ -72,9 +72,9 @@
     }
 
     if (obstacleDisplayed) {
-      if ((e.key === "ArrowLeft" && obstaclePosition === "left") ||
+      if ((e.key === "ArrowLeft" && obstaclePosition === "right") ||
           (e.key === " " && obstaclePosition === "center") ||
-          (e.key === "ArrowRight" && obstaclePosition === "right")) {
+          (e.key === "ArrowRight" && obstaclePosition === "left")) {
 
         id("box").innerHTML = "";
         calcReactionTime();
@@ -88,9 +88,9 @@
           document.addEventListener("keydown", keyIsPressed);
 
         } else {
-          id("curr-trial").innerHTML = "All trials complete";
+          id("curr-trial").innerHTML = "All " + NUM_TRIALS + " trials have been completed!";
           let avgReactionTime = total / NUM_TRIALS;
-          id("print-avg").innerHTML = "Your Average Reaction Time: " +
+          id("print-avg").innerHTML = "Average Reaction Time: " +
                                         avgReactionTime.toFixed(4) + " seconds";
           obstacleDisplayed = false;
           document.removeEventListener("keydown", keyIsPressed);
@@ -129,8 +129,11 @@
   }
 
   function getObstaclePosition() {
-    let maxLeft = 800;
-    let maxTop = 600;
+    let viewportWidth = document.documentElement.clientWidth;
+    let viewportHeight = document.documentElement.clientHeight;
+    let maxLeft = viewportWidth - 200;
+    let maxTop = viewportHeight / 2;
+
     let randomPosition = Math.floor(Math.random() * 3);
     let left, top, positionIndicator;
 
@@ -138,14 +141,15 @@
       left = 0;
       positionIndicator = "left";
     } else if (randomPosition === 1) {
-      left = (maxLeft - 0) / 2;
+      left = Math.max(0, maxLeft / 2);
+      top = Math.max(maxTop, (viewportHeight - 200) / 2);
       positionIndicator = "center";
     } else {
       left = maxLeft;
+      top = Math.max(maxTop, (viewportHeight - 200) / 2);
       positionIndicator = "right";
     }
 
-    top = maxTop / 2;
     id("box").style.left = left + "px";
     id("box").style.top = top + "px";
     id("box").style.display = "block";

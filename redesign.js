@@ -6,15 +6,18 @@
   const FILE_NAMES = ["person1.png", "person2.png", "person3.png", "person4.png", "person5.png", "person6.png",
                       "pet1.png", "pet2.png", "pet3.png"]
 
+  const OBSTACLE_TIME = 5000; // adjust this value to change how long it takes for an obstacle to appear
+  const NUM_TRIALS = 3; // adjust this value to change number of trials
+
   let clickedTime;
   let createdTime;
   let reactionTime;
+  let obstaclePosition;
 
   let currTrial = 1;
-  let numTrials = 3;
   let total = 0.0;
 
-  let obstacleDisplayed = true;
+  let obstacleDisplayed = true; // whether there is an object displayed on the screen
 
 
   function init() {
@@ -48,25 +51,13 @@
     //video.play();
     playWarning();
 
-    if (currTrial <= numTrials) {
-      let obstaclePosition = await makeObstacle();
+    // disable the start button once simulation starts
+    // otherwise browser will interpret spacebar input as clicking the button
+    id("start").disabled = true;
 
-      // document.addEventListener("keydown", keyIsPressed);
-      document.addEventListener("keydown", function(event) {
-        keyIsPressed(event, obstaclePosition);
-      });
-
-      // console.log(obstaclePosition);
-
-    } else {
-      let avgReactionTime = total / numTrials;
-      id("print-avg").innerHTML = "Your Average Reaction Time: " +
-                                   avgReactionTime.toFixed(2) + " seconds";
-      id("box").innerHTML = "";
-
-      obstacleDisplayed = false;
-      document.removeEventListener("keydown", keyIsPressed);
-
+    if (currTrial <= NUM_TRIALS) {
+      await makeObstacle();
+      document.addEventListener("keydown", keyIsPressed);
     }
   }
 
@@ -75,54 +66,70 @@
     // video.stop();
   }
 
-
-  // should also accept obstacle's position as a param?
-  function keyIsPressed(event, obstaclePosition) {
-    let keyCode = event.keyCode; // 37 - left, 32 - space, 39 - right
-
-    if (currTrial > numTrials) {
+  async function keyIsPressed(e) {
+    if (currTrial > NUM_TRIALS) {
       obstacleDisplayed = false;
     }
 
-    // then check if the keyCode matches obstacle's position
-    // reaction time shouldn't be calculated till they match
-    if (event.key === 'Enter' && (obstacleDisplayed)) {
-      clickedTime = Date.now();
-      reactionTime = (clickedTime - createdTime) / 1000;
-      total += reactionTime;
-      id("box").innerHTML = "";
+    if (obstacleDisplayed) {
+      if ((e.key === "ArrowLeft" && obstaclePosition === "left") ||
+          (e.key === " " && obstaclePosition === "center") ||
+          (e.key === "ArrowRight" && obstaclePosition === "right")) {
+
+        id("box").innerHTML = "";
+
+        calcReactionTime();
+        currTrial += 1;
+        console.log("start:" + currTrial); // debugging purposes
+
+        if (currTrial <= NUM_TRIALS) {
+          id("curr-trial").innerHTML = "Trial " + (currTrial);
+          document.removeEventListener("keydown", keyIsPressed);
+          await makeObstacle();
+          document.addEventListener("keydown", keyIsPressed);
+
+        } else {
+          id("curr-trial").innerHTML = "All trials complete";
+          let avgReactionTime = total / NUM_TRIALS;
+          id("print-avg").innerHTML = "Your Average Reaction Time: " +
+                                        avgReactionTime.toFixed(4) + " seconds";
+          obstacleDisplayed = false;
+          document.removeEventListener("keydown", keyIsPressed);
+        }
+      }
     }
   }
 
+  function calcReactionTime() {
+    clickedTime = Date.now();
+    reactionTime = (clickedTime - createdTime) / 1000;
+    total += reactionTime;
+  }
 
   async function makeObstacle() {
-    id("curr-trial").innerHTML = "Trial " + (currTrial);
-    currTrial += 1;
+    await new Promise((resolve, reject) => {
+      console.log("obstacle created"); // debugging purposes
 
-    let time = Math.random() * 5000;
-    let obstaclePosition = await new Promise((resolve, reject) => {
+      let time = Math.random() * OBSTACLE_TIME;
+
       setTimeout(function() {
-        id("box").innerHTML = "";
-
         let obstacle = document.createElement("img");
         let index = Math.floor(Math.random() * FILE_NAMES.length);
+
         obstacle.src = "img/" + FILE_NAMES[index];
         obstacle.alt = "obstacle";
         obstacle.style.width = "80%";
 
-        let box = id("box");
-        box.appendChild(obstacle);
-        let position = positionObstacle();
+        id("box").appendChild(obstacle);
         createdTime = Date.now();
+        obstaclePosition = getObstaclePosition();
 
-        resolve(position);
+        resolve();
       }, time);
-    });
-    return obstaclePosition;
+    })
   }
 
-
-  function positionObstacle() {
+  function getObstaclePosition() {
     let maxLeft = 800;
     let maxTop = 600;
     let randomPosition = Math.floor(Math.random() * 3);
@@ -130,25 +137,22 @@
 
     if (randomPosition === 0) {
       left = 0;
-      top = maxTop / 2;
       positionIndicator = "left";
     } else if (randomPosition === 1) {
       left = (maxLeft - 0) / 2;
-      top = maxTop / 2;
       positionIndicator = "center";
     } else {
       left = maxLeft;
-      top = maxTop / 2;
       positionIndicator = "right";
     }
 
+    top = maxTop / 2;
     id("box").style.left = left + "px";
     id("box").style.top = top + "px";
     id("box").style.display = "block";
 
     return positionIndicator;
   }
-
 
   function id(name) {
     return document.getElementById(name);

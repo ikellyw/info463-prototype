@@ -3,11 +3,11 @@
 (function() {
   window.addEventListener("load", init);
 
-  window.addEventListener("keydown", function(event) {
-    if (event.key === " ") {
-      event.preventDefault(); // to prevent browser from interpreting space bar as click button
-    }
-  });
+  // document.addEventListener("keydown", function(event) {
+  //   if (event.key === " ") {
+  //     event.preventDefault(); // to prevent browser from interpreting space bar as click button
+  //   }
+  // });
 
   const FILE_NAMES = ["person1.png", "person2.png", "person3.png", "person4.png", "person5.png", "person6.png",
                       "pet1.png", "pet2.png", "pet3.png"]
@@ -53,7 +53,6 @@
     if (currTrial > NUM_TRIALS) {
       obstacleDisplayed = false;
     }
-    document.removeEventListener("keydown", keyIsPressed);
 
     if (obstacleDisplayed) {
       if ((e.key === "ArrowLeft" && obstaclePosition === "left") ||

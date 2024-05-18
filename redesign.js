@@ -8,7 +8,7 @@
 
   const OBSTACLE_TIME = 5000; // adjust this value to change how long it takes for an obstacle to appear
                               // (1000 = 1 second)
-  const NUM_TRIALS = 5; // adjust this value to change number of trials
+  const NUM_TRIALS = 10; // adjust this value to change number of trials
   const WARNING_TIME = 700; // makes warnings appear 0.7 second before the actual obstacle shows up
 
   let clickedTime;

@@ -49,27 +49,34 @@ body {
   line-height: 1.1rem;
  }
 
+ /* changed the left & top from px to % to adjust to different screen sizes */
  #brake {
   position: fixed;
   width: 150px;
-  top: 550px;
-  left: 690px;
+  bottom: 5%;
+  left: 45%;
+  /* top: 550px;
+  left: 690px; */
   display: none;
  }
 
  #left-warning {
   position: fixed;
   width: 100px;
-  top: 560px;
-  left: 200px;
+  bottom: 5%;
+  left: 10%;
+  /* top: 560px;
+  left: 200px; */
   display: none;
  }
 
  #right-warning {
   position: fixed;
   width: 100px;
-  top: 560px;
-  right: 200px;
+  bottom: 5%;
+  right: 10%;
+  /* top: 560px;
+  right: 200px; */
   display: none;
  }
 

@@ -7,7 +7,7 @@
                       "pet1.png", "pet2.png", "pet3.png"]
 
   const OBSTACLE_TIME = 5000; // adjust this value to change how long it takes for an obstacle to appear
-  const NUM_TRIALS = 5; // adjust this value to change number of trials
+  const NUM_TRIALS = 10; // adjust this value to change number of trials
 
   let clickedTime;
   let createdTime;

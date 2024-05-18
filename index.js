@@ -109,8 +109,8 @@
   function getObstaclePosition() {
     let viewportWidth = document.documentElement.clientWidth;
     let viewportHeight = document.documentElement.clientHeight;
-    let maxLeft = viewportWidth - 200;
-    let maxTop = viewportHeight / 2;
+    let maxLeft = viewportWidth - 300;
+    let maxTop = (viewportHeight / 2) - 300;
 
     let randomPosition = Math.floor(Math.random() * 3);
     let left, top, positionIndicator;

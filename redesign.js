@@ -7,7 +7,9 @@
                       "pet1.png", "pet2.png", "pet3.png"]
 
   const OBSTACLE_TIME = 5000; // adjust this value to change how long it takes for an obstacle to appear
+                              // (1000 = 1 second)
   const NUM_TRIALS = 5; // adjust this value to change number of trials
+  const WARNING_TIME = 700; // makes warnings appear 0.7 second before the actual obstacle shows up
 
   let clickedTime;
   let createdTime;
@@ -119,19 +121,9 @@
       let time = Math.random() * OBSTACLE_TIME;
 
       setTimeout(function() {
-        let obstacle = document.createElement("img");
-        let index = Math.floor(Math.random() * FILE_NAMES.length);
-
-        obstacle.src = "img/" + FILE_NAMES[index];
-        obstacle.alt = "obstacle";
-        obstacle.style.width = "130%";
-
-        id("box").appendChild(obstacle);
-        playWarning();
-        createdTime = Date.now();
         obstaclePosition = getObstaclePosition();
+        playWarning();
 
-        // NOTE: add diff warning signals here based on the obstaclePosition?
         if (obstaclePosition === "left") {
           startFlash(id('left-warning'));
         } else if (obstaclePosition === "center") {
@@ -139,6 +131,20 @@
         } else if (obstaclePosition === "right") {
           startFlash(id('right-warning'));
         }
+
+        setTimeout(function() { // the obstacle appears WARNING_TIME second after the warning appears
+          let obstacle = document.createElement("img");
+          let index = Math.floor(Math.random() * FILE_NAMES.length);
+
+          obstacle.src = "img/" + FILE_NAMES[index];
+          obstacle.alt = "obstacle";
+          obstacle.style.width = "130%";
+
+          id("box").appendChild(obstacle);
+          createdTime = Date.now();
+
+          resolve();
+        }, WARNING_TIME);
 
         resolve();
       }, time);
@@ -148,8 +154,8 @@
   function getObstaclePosition() {
     let viewportWidth = document.documentElement.clientWidth;
     let viewportHeight = document.documentElement.clientHeight;
-    let maxLeft = viewportWidth - 200;
-    let maxTop = viewportHeight / 2;
+    let maxLeft = viewportWidth - 300;
+    let maxTop = (viewportHeight / 2) - 300;
 
     let randomPosition = Math.floor(Math.random() * 3);
     let left, top, positionIndicator;

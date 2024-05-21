@@ -6,8 +6,13 @@
   const FILE_NAMES = ["person1.png", "person2.png", "person3.png", "person4.png", "person5.png", "person6.png",
                       "pet1.png", "pet2.png", "pet3.png"]
 
-  const OBSTACLE_TIME = 5000; // adjust this value to change how long it takes for an obstacle to appear
-  const NUM_TRIALS = 10; // adjust this value to change number of trials
+  // NOTE:
+  // if you're unsure whether the program is running, press F12 to open up your browser's console
+  // if it's running properly, it'll show you the current trial number
+  // & the time it will take for the next obstacle to appear (divide that number by 1000 to see it in seconds)
+
+  const OBSTACLE_TIME = 150000; // adjust this value to change how long it takes for an obstacle to appear
+  const NUM_TRIALS = 15; // adjust this value to change number of trials
 
   let clickedTime;
   let createdTime;
@@ -40,8 +45,8 @@
   }
 
   function stop() {
-    // var video = document.getElementById("video");
-    // video.stop();
+    var video = document.getElementById("video");
+    video.stop();
   }
 
   async function keyIsPressed(e) {
@@ -88,6 +93,7 @@
       console.log("obstacle created"); // debugging purposes
 
       let time = Math.random() * OBSTACLE_TIME;
+      console.log(time); // debugging purposes
 
       setTimeout(function() {
         let obstacle = document.createElement("img");

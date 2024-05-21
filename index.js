@@ -11,7 +11,7 @@
   // if it's running properly, it'll show you the current trial number
   // & the time it will take for the next obstacle to appear (divide that number by 1000 to see it in seconds)
 
-  const MAX_OBSTACLE_TIME = 45000; // 45 seconds
+  const MAX_OBSTACLE_TIME = 30000; // 30 seconds
   const MIN_OBSTACLE_TIME = 10000; // 10 seconds
   const NUM_TRIALS = 10; // adjust this value to change number of trials
 
@@ -43,11 +43,6 @@
       await makeObstacle();
       document.addEventListener("keydown", keyIsPressed);
     }
-  }
-
-  function stop() {
-    var video = document.getElementById("video");
-    video.stop();
   }
 
   async function keyIsPressed(e) {

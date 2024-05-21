@@ -11,9 +11,9 @@
   // if it's running properly, it'll show you the current trial number
   // & the time it will take for the next obstacle to appear (divide that number by 1000 to see it in seconds)
 
-  const OBSTACLE_TIME = 150000; // adjust this value to change how long it takes for an obstacle to appear
-                              // (1000 = 1 second)
-  const NUM_TRIALS = 15; // adjust this value to change number of trials
+  const MAX_OBSTACLE_TIME = 45000; // 45 seconds
+  const MIN_OBSTACLE_TIME = 10000; // 10 seconds
+  const NUM_TRIALS = 10; // adjust this value to change number of trials
   const WARNING_TIME = 700; // makes warnings appear 0.7 second before the actual obstacle shows up
 
   let clickedTime;
@@ -123,7 +123,7 @@
     await new Promise((resolve, reject) => {
       console.log("obstacle created"); // debugging purposes
 
-      let time = Math.random() * OBSTACLE_TIME;
+      let time = (Math.floor(Math.random() * (MAX_OBSTACLE_TIME - MIN_OBSTACLE_TIME + 1)) + MIN_OBSTACLE_TIME);
       console.log(time); // debugging purposes
 
       setTimeout(function() {
